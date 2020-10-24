@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Collections\Collections.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
+    <PackageReference Include="FsCheck" Version="2.14.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Common.fs" />
+    <Compile Include="sorting\SortingTest.fs" />
+    <Compile Include="sorting\HeapSortTest.fs" />
+    <Compile Include="sorting\InsertionSortTest.fs" />
+    <Compile Include="sorting\MergeSortTest.fs" />
+    <Compile Include="sorting\QuickSortTest.fs" />
+    <Compile Include="sorting\RadixSortTest.fs" />
+    <Compile Include="substring_search\SubstringSearchTest.fs" />
+    <Compile Include="substring_search\BoyerMooreTest.fs" />
+    <Compile Include="substring_search\KnuthMorrisPrattTest.fs" />
+    <Compile Include="substring_search\RabinKarpTest.fs" />
+    <Compile Include="collection\list\ListTest.fs" />
+    <Compile Include="collection\list\ArrayListTest.fs" />
+    <Compile Include="collection\list\LinkedListTest.fs" />
+    <Compile Include="collection\queue\QueueTest.fs" />
+    <Compile Include="collection\queue\ArrayQueueTest.fs" />
+    <Compile Include="collection\queue\BinaryHeapTest.fs" />
+    <Compile Include="collection\queue\CircularBufferTest.fs" />
+    <Compile Include="collection\queue\LinkedQueueTest.fs" />
+    <Compile Include="collection\tree\TreeTest.fs" />
+    <Compile Include="collection\set\TreeSetTest.fs" />
+    <Compile Include="collection\tree\BinaryTreeTest.fs" />
+    <Compile Include="collection\tree\KdTreeTest.fs" />
+    <Compile Include="collection\tree\RedBlackTree.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="collection\graph\" />
+    <Folder Include="collection\map\" />
+  </ItemGroup>
+</Project>
