@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Compile Include="Common.fs" />
+    <Compile Include="sorting\Histogram.fs" />
     <Compile Include="sorting\SortingTest.fs" />
     <Compile Include="sorting\HeapSortTest.fs" />
     <Compile Include="sorting\InsertionSortTest.fs" />

@@ -16,12 +16,6 @@ type SortingTest<'t when 't : comparison>() =
         |> Seq.pairwise
         |> Seq.forall(fun (l, r) -> l <= r) 
 
-    static member Histogram (array: array<'t>) = 
-        Array.fold (fun map key -> 
-            let count = Option.defaultValue 0 (Map.tryFind key map)
-            map |> Map.add key count
-        ) Map.empty array
-
     [<TestMethod>]
     member this.ItSortsArray() =
         let test array =
@@ -33,9 +27,9 @@ type SortingTest<'t when 't : comparison>() =
     [<TestMethod>]
     member this.ItRearrangesKeys() =
         let test array = 
-            let before = SortingTest.Histogram array
+            let before = Histogram array
             this.Sort array
-            let after = SortingTest.Histogram array
+            let after = Histogram array
             before = after
 
         Assert.All test this.Arrays
