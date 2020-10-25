@@ -14,5 +14,6 @@ pool:
   vmImage: $(imageName)
 
 steps:
-- script: |
-    dotnet test
+- task: 'DotNetCoreCLI@2'
+  inputs:
+    command: test
