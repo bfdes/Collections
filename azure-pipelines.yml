@@ -15,5 +15,4 @@ pool:
 
 steps:
 - script: |
-    echo "Hello, World!"
-
+    dotnet test
