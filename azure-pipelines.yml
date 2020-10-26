@@ -1,19 +1,22 @@
 trigger:
 - master
 
-strategy:
-  matrix:
-    linux:
-      imageName: 'ubuntu-latest'
-    mac:
-      imageName: 'macos-latest'
-    windows:
-      imageName: 'windows-latest' 
-
-pool:
-  vmImage: $(imageName)
-
-steps:
-- task: 'DotNetCoreCLI@2'
-  inputs:
-    command: test
+stages: 
+- stage:
+  displayName: Build and Test
+  jobs:
+  - job:
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        mac:
+          imageName: 'macos-latest'
+        windows:
+          imageName: 'windows-latest'
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - task: 'DotNetCoreCLI@2'
+      inputs:
+        command: test
