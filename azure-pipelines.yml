@@ -1,9 +1,11 @@
 trigger:
 - master
 
-jobs:
+stages: 
+- stage:
+  displayName: Build and Test
+  jobs:
   - job:
-    displayName: Build and Test
     strategy:
       matrix:
         linux:
