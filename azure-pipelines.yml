@@ -1,6 +1,4 @@
-trigger:
-- master
-
+trigger: *
 stages: 
 - stage:
   displayName: Build and Test
