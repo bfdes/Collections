@@ -1,6 +1,6 @@
 # Collections
 
-![GitHub Actions](https://github.com/bfdes/Collections/workflows/Build%20and%20Test/badge.svg)
+![GitHub Actions](https://github.com/bfdes/Collections/workflows/Test/badge.svg)
 
 Class library formed by implementing many of the algorithms and data structures from Princeton's Algorithms I & II courses in idiomatic C#.
 
