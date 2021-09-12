@@ -2,10 +2,7 @@ name: Test
 on: push
 jobs:
   job:
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - name: Check out repository
       uses: actions/checkout@v2    
