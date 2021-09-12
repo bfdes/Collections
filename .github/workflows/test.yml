@@ -9,9 +9,10 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v2    
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Set up JVM
+      uses: actions/setup-java@v2
       with:
-        dotnet-version: 5.0.x
+        java-version: 11
+        distribution: adopt
     - name: Run tests
-      run: dotnet test
+      run: sbt test
