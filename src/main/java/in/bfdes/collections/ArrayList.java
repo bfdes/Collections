@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 public class ArrayList<T> implements List<T> {
     private T[] stack;
-    private int head;
+    private int head = -1;
 
     private class ListIterator implements Iterator<T> {
         private int next = 0;
@@ -27,7 +27,6 @@ public class ArrayList<T> implements List<T> {
         if (initialCapacity < 1)
             throw new IllegalArgumentException();
         stack = (T[]) new Object[initialCapacity];
-        head = -1;
     }
 
     public ArrayList() {
@@ -36,7 +35,7 @@ public class ArrayList<T> implements List<T> {
 
     public ArrayList(T[] initialItems) {
         this(Math.max(1, initialItems.length));
-        for(var item: initialItems)
+        for (var item : initialItems)
             push(item);
     }
 
@@ -80,15 +79,15 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void push(T item) {
-        if(item == null)
+        if (item == null)
             throw new IllegalArgumentException();
         if (isFull())
             resize(2 * stack.length);
         stack[++head] = item;
     }
 
-    private void resize(int size) {
-        var newStack = (T[]) new Object[size];
+    private void resize(int newCapacity) {
+        var newStack = (T[]) new Object[newCapacity];
         for (int i = 0; i <= head; i++) {
             newStack[i] = stack[i];
         }

@@ -43,16 +43,12 @@ public class CircularBuffer<T> implements Iterable<T> {
         return buffer.length;
     }
 
-    public int size() {
-        return size;
-    }
-
     public boolean isEmpty() {
         return size == 0;
     }
 
-    public boolean isFull() {
-        return size == buffer.length;
+    private boolean isFull() {
+        return size == capacity();
     }
 
     public T peek() {
@@ -72,13 +68,15 @@ public class CircularBuffer<T> implements Iterable<T> {
     }
 
     public void push(T item) {
-        if(item == null)
+        if (item == null)
             throw new IllegalArgumentException();
-        if (isFull())
-            throw new UnsupportedOperationException();  // TODO Wrong error to throw
         buffer[tail] = item;
         tail = (tail + 1) % capacity();
-        size++;
+        if (isFull()) {
+            head = (head + 1) % capacity();
+        } else {
+            size++;
+        }
     }
 
     public T dequeue() {

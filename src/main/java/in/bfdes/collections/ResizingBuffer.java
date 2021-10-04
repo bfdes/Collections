@@ -95,14 +95,14 @@ public class ResizingBuffer<T> implements Iterable<T> {
         push(item);
     }
 
-    private void resize(int size) {
-        var newBuffer = (T[]) new Object[size];
-        for (int i = 0; i <= this.size; i++) {
+    private void resize(int newCapacity) {
+        var newBuffer = (T[]) new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
             newBuffer[i] = buffer[(head + i) % buffer.length];
         }
         buffer = newBuffer;
         head = 0;
-        tail = this.size;
+        tail = size - 1;
     }
 
     @Override
