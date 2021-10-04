@@ -4,8 +4,6 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class Sorting {
-    private static final int MERGESORT_THRESHOLD = 100;
-
     public static <T> void shuffle(T[] array) {
         var rng = new Random();
         for (int i = 0; i < array.length; i++) {
