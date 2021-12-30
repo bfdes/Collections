@@ -1,5 +1,7 @@
 package in.bfdes.collections;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 /**
@@ -93,11 +95,21 @@ public class DirectedGraph<V> implements Graph<V> {
     }
 
     public Iterable<V> neighbours(V vertex) {
-        // TODO Stream vertices without copying all of them first
-        var neighbours = new LinkedList<V>();
-        for (var edge : edges(vertex))
-            neighbours.push(edge.to());
-        return neighbours;
+        return () -> new Iterator<>() {
+            private final Iterator<Edge<V>> edges = edges(vertex).iterator();
+
+            @Override
+            public boolean hasNext() {
+                return edges.hasNext();
+            }
+
+            @Override
+            public V next() {
+                if (!edges.hasNext())
+                    throw new NoSuchElementException();
+                return edges.next().to();
+            }
+        };
     }
 
     public DirectedGraph<V> complement() {
