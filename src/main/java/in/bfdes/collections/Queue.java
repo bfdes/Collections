@@ -4,42 +4,30 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Queue<T> implements Iterable<T> {
-    private Node<T> head;
-    private Node<T> tail;
+    private Node head;
+    private Node tail;
     private int size = 0;
 
-    private static class Node<U> {
-        public final U item;
-        public Node<U> next;
+    private class Node {
+        public final T item;
+        public Node next;
 
-        public Node(U item, Node<U> next) {
+        public Node(T item, Node next) {
             this.item = item;
             this.next = next;
         }
     }
 
-    private class QueueIterator implements Iterator<T> {
-        private Node<T> next = head;
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            T item = next.item;
-            next = next.next;
-            return item;
-        }
+    public Queue() {
     }
 
-    public Queue(){}
+    public Queue(T[] initialItems) {
+        for (var item : initialItems)
+            push(item);
+    }
 
     public Queue(Iterable<T> initialItems) {
-        if(initialItems == null)
+        if (initialItems == null)
             throw new IllegalArgumentException();
         for (var item : initialItems)
             push(item);
@@ -69,9 +57,9 @@ public class Queue<T> implements Iterable<T> {
     }
 
     public void push(T item) {
-        if(item == null)
+        if (item == null)
             throw new IllegalArgumentException();
-        var last = new Node<>(item, null);
+        var last = new Node(item, null);
         if (isEmpty()) {
             head = last;
         } else {
@@ -91,6 +79,20 @@ public class Queue<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new QueueIterator();
+        return new Iterator<>() {
+            private Node next = head;
+
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                T item = next.item;
+                next = next.next;
+                return item;
+            }
+        };
     }
 }

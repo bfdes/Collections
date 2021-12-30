@@ -7,22 +7,6 @@ public class ArrayList<T> implements List<T> {
     private T[] stack;
     private int head = -1;
 
-    private class ListIterator implements Iterator<T> {
-        private int next = 0;
-
-        @Override
-        public boolean hasNext() {
-            return next <= head;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            return stack[next++];
-        }
-    }
-
     public ArrayList(int initialCapacity) {
         if (initialCapacity < 1)
             throw new IllegalArgumentException();
@@ -40,7 +24,6 @@ public class ArrayList<T> implements List<T> {
     }
 
     public ArrayList(Iterable<T> initialItems) {
-        this();
         for (var item : initialItems)
             push(item);
     }
@@ -88,14 +71,27 @@ public class ArrayList<T> implements List<T> {
 
     private void resize(int newCapacity) {
         var newStack = (T[]) new Object[newCapacity];
-        for (int i = 0; i <= head; i++) {
+        for (int i = 0; i <= head; i++)
             newStack[i] = stack[i];
-        }
         stack = newStack;
     }
 
     @Override
     public Iterator<T> iterator() {
-        return new ListIterator();
+        return new Iterator<>() {
+            private int next = 0;
+
+            @Override
+            public boolean hasNext() {
+                return next <= head;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                return stack[next++];
+            }
+        };
     }
 }

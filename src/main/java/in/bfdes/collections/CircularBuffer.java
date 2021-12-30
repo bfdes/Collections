@@ -9,24 +9,6 @@ public class CircularBuffer<T> implements Iterable<T> {
     private int tail = 0;
     private int size = 0;
 
-    private class BufferIterator implements Iterator<T> {
-        private int next = head;
-
-        @Override
-        public boolean hasNext() {
-            return next != tail;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            T item = buffer[next];
-            next = (next + 1) % capacity();
-            return item;
-        }
-    }
-
     public CircularBuffer(int capacity) {
         if (capacity < 1)
             throw new IllegalArgumentException();
@@ -39,6 +21,10 @@ public class CircularBuffer<T> implements Iterable<T> {
             push(item);
     }
 
+    public int size() {
+        return size;
+    }
+
     public int capacity() {
         return buffer.length;
     }
@@ -47,8 +33,8 @@ public class CircularBuffer<T> implements Iterable<T> {
         return size == 0;
     }
 
-    private boolean isFull() {
-        return size == capacity();
+    public boolean isFull() {
+        return size == buffer.length;
     }
 
     public T peek() {
@@ -72,11 +58,10 @@ public class CircularBuffer<T> implements Iterable<T> {
             throw new IllegalArgumentException();
         buffer[tail] = item;
         tail = (tail + 1) % capacity();
-        if (isFull()) {
+        if (isFull())
             head = (head + 1) % capacity();
-        } else {
+        else
             size++;
-        }
     }
 
     public T dequeue() {
@@ -89,6 +74,22 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new BufferIterator();
+        return new Iterator<>() {
+            private int next = head;
+
+            @Override
+            public boolean hasNext() {
+                return next != tail;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                T item = buffer[next];
+                next = (next + 1) % capacity();
+                return item;
+            }
+        };
     }
 }

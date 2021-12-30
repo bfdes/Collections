@@ -9,24 +9,6 @@ public class ResizingBuffer<T> implements Iterable<T> {
     private int tail = 0;
     private int size = 0;
 
-    private class BufferIterator implements Iterator<T> {
-        private int next = head;
-
-        @Override
-        public boolean hasNext() {
-            return next != tail;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            T item = buffer[next];
-            next = (next + 1) % buffer.length;
-            return item;
-        }
-    }
-
     public ResizingBuffer(int initialCapacity) {
         if (initialCapacity < 1)
             throw new IllegalArgumentException();
@@ -37,14 +19,14 @@ public class ResizingBuffer<T> implements Iterable<T> {
         this(10);
     }
 
-    public ResizingBuffer(T[] initialItems) {
-        this(Math.max(1, initialItems.length));
+    public ResizingBuffer(Iterable<T> initialItems) {
+        this();
         for (var item : initialItems)
             push(item);
     }
 
-    public ResizingBuffer(Iterable<T> initialItems) {
-        this();
+    public ResizingBuffer(T[] initialItems) {
+        this(Math.max(1, initialItems.length));
         for (var item : initialItems)
             push(item);
     }
@@ -97,9 +79,8 @@ public class ResizingBuffer<T> implements Iterable<T> {
 
     private void resize(int newCapacity) {
         var newBuffer = (T[]) new Object[newCapacity];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             newBuffer[i] = buffer[(head + i) % buffer.length];
-        }
         buffer = newBuffer;
         head = 0;
         tail = size - 1;
@@ -107,6 +88,22 @@ public class ResizingBuffer<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new BufferIterator();
+        return new Iterator<>() {
+            private int next = head;
+
+            @Override
+            public boolean hasNext() {
+                return next != tail;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                T item = buffer[next];
+                next = (next + 1) % buffer.length;
+                return item;
+            }
+        };
     }
 }

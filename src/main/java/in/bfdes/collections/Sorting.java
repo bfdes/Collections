@@ -3,7 +3,10 @@ package in.bfdes.collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class Sorting {
+public final class Sorting {
+    private Sorting() {
+    }
+
     public static <T> void shuffle(T[] array) {
         var rng = new Random();
         for (int i = 0; i < array.length; i++) {
@@ -102,5 +105,25 @@ public class Sorting {
                 array[k] = auxArray[j++];  // stable implementation
             else
                 array[k] = auxArray[i++];
+    }
+
+    public static <T extends Comparable<T>> void quickSort(T[] array) {
+        quickSort(array, Comparator.naturalOrder());
+    }
+
+    public static <T> void quickSort(T[] array, Comparator<T> comparator) {
+
+    }
+
+    public static <T> void quickSort(T[] array, int low, int high, Comparator<T> comparator) {
+
+    }
+
+    public static <T extends Comparable<T>> void heapSort(T[] array) {
+        heapSort(array, Comparator.naturalOrder());
+    }
+
+    public static <T> void heapSort(T[] array, Comparator<T> comparator) {
+
     }
 }

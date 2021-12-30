@@ -7,38 +7,21 @@ public class LinkedList<T> implements List<T> {
     private Node<T> head;
     private int size = 0;
 
-    private static class Node<U> {
-        public final U item;
-        public Node<U> next;
-
-        public Node(U item, Node<U> next) {
-            this.item = item;
-            this.next = next;
-        }
+    private record Node<U>(U item, Node<U> next) {
     }
 
-    private class ListIterator implements Iterator<T> {
-        private Node<T> next = head;
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext())
-                throw new NoSuchElementException();
-            T item = next.item;
-            next = next.next;
-            return item;
-        }
+    public LinkedList() {
     }
-
-    public LinkedList() {}
 
     public LinkedList(Iterable<T> initialItems) {
-        if(initialItems == null)
+        if (initialItems == null)
+            throw new IllegalArgumentException();
+        for (var item : initialItems)
+            push(item);
+    }
+
+    public LinkedList(T[] initialItems) {
+        if (initialItems == null)
             throw new IllegalArgumentException();
         for (var item : initialItems)
             push(item);
@@ -73,7 +56,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public void push(T item) {
-        if(item == null)
+        if (item == null)
             throw new IllegalArgumentException();
         head = new Node<>(item, head);
         size++;
@@ -81,6 +64,22 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ListIterator();
+        return new Iterator<>() {
+            private Node<T> next = head;
+
+            @Override
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                T item = next.item;
+                next = next.next;
+                return item;
+            }
+        };
     }
 }

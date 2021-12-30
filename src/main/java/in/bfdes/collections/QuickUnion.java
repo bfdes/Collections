@@ -3,7 +3,7 @@ package in.bfdes.collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuickUnion<T> implements UnionFind<T> {
+public class QuickUnion<T> implements DisjointSet<T> {
     private final Map<T, Integer> ranks = new HashMap<>();
     private final Map<T, T> parents = new HashMap<>();
 
@@ -15,9 +15,8 @@ public class QuickUnion<T> implements UnionFind<T> {
     }
 
     private T root(T e) {
-        while (!e.equals(parents.get(e))) {
+        while (!e.equals(parents.get(e)))
             e = parents.get(e);
-        }
         return e;
     }
 
