@@ -2,6 +2,8 @@ package in.bfdes.collections;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 /**
  * Adjacency list representation of a weighted, undirected graph.
@@ -172,6 +174,72 @@ public class UndirectedGraph<V> implements Graph<V> {
      * Returns `true` if this graph is cyclic in O(V+E) time, `false` otherwise.
      */
     public boolean isCyclic() {
-        throw new RuntimeException("Not implemented");  // TODO
+        var visitedVertices = new HashSet<V>();
+
+        var isCyclic = new BiPredicate<V, V>() {
+            public boolean test(V vertex) {
+                if (visitedVertices.contains(vertex))
+                    return false; // `vertex` has been visited, but only because it was part of some other component
+                visitedVertices.add(vertex);
+                for (var neighbour : neighbours(vertex))
+                    if (test(neighbour, vertex))
+                        return true;
+                return false;
+            }
+
+            @Override
+            public boolean test(V vertex, V parent) {
+                if (visitedVertices.contains(vertex))
+                    return true;  // encountered `vertex` twice in a DFS trace
+                visitedVertices.add(vertex);
+                for (var neighbour : neighbours(vertex))
+                    // Continue the DFS trace, but do not go back to `parent` (leads to false positive)
+                    if (!parent.equals(neighbour) && test(neighbour, vertex))
+                        return true;
+                return false;
+            }
+        };
+
+        for (var vertex : vertices())
+            if (isCyclic.test(vertex))
+                return true;
+        return false;
+    }
+
+    /**
+     * Returns all the connected components that comprise this graph in O(V+E) time.
+     *
+     * @return A set containing each connected component, represented as a subgraph
+     */
+    public Set<UndirectedGraph<V>> components() {
+        var components = new HashSet<UndirectedGraph<V>>();
+        var visitedVertices = new HashSet<V>();
+
+        var component = new Function<V, UndirectedGraph<V>>() {
+            @Override
+            public UndirectedGraph<V> apply(V source) {
+                var component = new UndirectedGraph<V>();
+                var stack = new LinkedList<V>();
+                stack.push(source);
+
+                while (!stack.isEmpty()) {
+                    var vertex = stack.pop();
+                    visitedVertices.add(vertex);
+                    for (var edge : edges(vertex)) {
+                        var neighbour = edge.to();
+                        if (visitedVertices.contains(neighbour))
+                            continue;  // n.b. `neighbour` must be part of this particular component, `component`
+                        component.add(edge);
+                        stack.push(neighbour);
+                    }
+                }
+                return component;
+            }
+        };
+
+        for (var vertex : vertices())
+            if (!visitedVertices.contains(vertex))
+                components.add(component.apply(vertex));
+        return components;
     }
 }
