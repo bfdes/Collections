@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="560ab056-e754-4e3d-bef1-6809c8f97799" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Paths.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Point.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinaryHeap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinaryHeap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinarySearchTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinarySearchTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/DirectedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/DirectedGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Edge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/PriorityQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/PriorityQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/RadixTrie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/RadixTrie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Sorting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Sorting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/SubstringSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/SubstringSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/TernarySearchTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/TernarySearchTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/UndirectedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/UndirectedGraph.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Record" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="1y2DMNlx53yZ2jnQYQIk5YR8CP1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="advanced.settings" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="560ab056-e754-4e3d-bef1-6809c8f97799" name="Changes" comment="" />
+      <created>1631440744874</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1631440744874</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
