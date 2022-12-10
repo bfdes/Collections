@@ -5,22 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="560ab056-e754-4e3d-bef1-6809c8f97799" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Paths.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Point.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinaryHeap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinaryHeap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinarySearchTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/BinarySearchTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/DirectedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/DirectedGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Edge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/HashSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/PriorityQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/PriorityQueue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/RadixTrie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/RadixTrie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Sorting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/Sorting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/SubstringSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/SubstringSearch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/TernarySearchTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/TernarySearchTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/UndirectedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/in/bfdes/collections/UndirectedGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/collections-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/collections-build.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/collections.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/collections.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/output" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/update/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/project/target/streams/_global/update/_global/streams/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.history3" beforeDir="false" afterPath="$PROJECT_DIR$/target/.history3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/dumpStructure/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/dumpStructure/_global/streams/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,14 +65,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="advanced.settings" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Users/bfdes/Projects/collections"
+  }
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

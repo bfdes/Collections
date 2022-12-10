@@ -1,0 +1,10 @@
+// Built files
+target
+
+// Platform specific
+.DS_Store
+
+// IDE
+.bsp
+.idea
+.vscode
