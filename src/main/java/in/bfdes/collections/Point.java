@@ -4,7 +4,10 @@ public record Point(double x, double y, double z) {
     double distanceSquaredTo(Point point) {
         if (point == null)
             throw new IllegalArgumentException();
-        return Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2) + Math.pow(z - point.z, 2);
+        var dx = x - point.x;
+        var dy = y - point.y;
+        var dz = z - point.z;
+        return Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2);
     }
 
     double distanceTo(Point point) {
