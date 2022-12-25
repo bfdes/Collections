@@ -76,7 +76,7 @@ public class LinkedList<T> implements List<T> {
             public T next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                T item = next.item;
+                var item = next.item;
                 next = next.next;
                 return item;
             }
