@@ -24,7 +24,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
          * We store `size` on the nodes rather than the `BinarySearchTree` in order to service efficient
          * implementations of `rank`, `floor` and `ceiling`
          */
-
         public Node(K key, V value) {
             this.key = key;
             this.value = value;
@@ -130,7 +129,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
                 else if (diff > 0)
                     node.right = apply(node.right);
                 else {
-                    // Found at least one child
+                    // Found key
                     if (node.left == null) return node.right;
                     if (node.right == null) return node.left;
                     // Found two children
