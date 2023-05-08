@@ -5,25 +5,17 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> {
-    /*
-    Nodes of a binary tree can either be empty or contain left and right subtrees.
-    We say a binary tree is in symmetric order if the key of each node is
-    - larger than all the keys in its left subtree, and
-    - smaller than all the keys in its right subtree.
-    n.b. Our tree is not allowed to contain duplicate keys.
-     */
     private Node root;
 
     private class Node {
         public K key;
         public V value;
         public Node left, right;
-        public int size = 1;  // size of the tree rooted at this node
-
-        /**
-         * We store `size` on the nodes rather than the `BinarySearchTree` in order to service efficient
-         * implementations of `rank`, `floor` and `ceiling`
+        /*
+        Size of the tree rooted at this node.
          */
+        public int size = 1;
+
         public Node(K key, V value) {
             this.key = key;
             this.value = value;
@@ -34,6 +26,14 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
             while (node.left != null)
                 node = node.left;
             return node;
+        }
+
+        public Node deleteMin() {
+            if (left == null)
+                return right;
+            left = left.deleteMin();
+            size = 1 + size(left) + size(right);
+            return this;
         }
 
         public boolean isSymmetric() {
@@ -54,10 +54,10 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
             @Override
             public Node apply(Node node) {
                 if (node == null)
-                    return new Node(key, value);  // k-v pair not found, so create one
+                    return new Node(key, value);
                 var diff = key.compareTo(node.key);
                 if (diff == 0)
-                    node.value = value; // existing k-v pair found, so overwrite its value
+                    node.value = value;
                 else if (diff < 0)
                     node.left = apply(node.left);
                 else
@@ -105,17 +105,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
         if (key == null)
             throw new IllegalArgumentException();
 
-        var deleteMin = new Function<Node, Node>() {
-            @Override
-            public Node apply(Node node) {
-                if (node.left == null)
-                    return node.right;
-                node.left = apply(node.left);
-                node.size = 1 + size(node.left) + size(node.right);
-                return node;
-            }
-        };
-
         var delete = new Function<Node, Node>() {
             @Override
             public Node apply(Node node) {
@@ -129,14 +118,12 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
                 else if (diff > 0)
                     node.right = apply(node.right);
                 else {
-                    // Found key
                     if (node.left == null) return node.right;
                     if (node.right == null) return node.left;
-                    // Found two children
                     var min = node.right.min();
                     node.key = min.key;
                     node.value = min.value;
-                    node.right = deleteMin.apply(node.right);
+                    node.right = node.right.deleteMin();
                 }
                 node.size = 1 + size(node.left) + size(node.right);
                 return node;
@@ -167,7 +154,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
     }
 
     @Override
-    public Iterator<Tuple<K, V>> iterator() {
+    public Iterator<Pair<K, V>> iterator() {
         return new Iterator<>() {
             private final List<Node> stack = new LinkedList<>();
             private Node node = root;
@@ -178,7 +165,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
             }
 
             @Override
-            public Tuple<K, V> next() {
+            public Pair<K, V> next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
                 while (node != null) {
@@ -186,7 +173,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
                     node = node.left;
                 }
                 node = stack.pop();
-                var tuple = new Tuple<>(node.key, node.value);
+                var tuple = new Pair<>(node.key, node.value);
                 node = node.right;
                 return tuple;
             }
@@ -196,7 +183,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
     @Override
     public Iterable<K> keys() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<K, V>> items = iterator();
+            private final Iterator<Pair<K, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -207,7 +194,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
             public K next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().first();
+                return items.next().key();
             }
         };
     }
@@ -215,7 +202,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
     @Override
     public Iterable<V> values() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<K, V>> items = iterator();
+            private final Iterator<Pair<K, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -226,7 +213,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Tree<K, V> 
             public V next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().second();
+                return items.next().value();
             }
         };
     }

@@ -11,102 +11,33 @@ import java.util.function.Function;
  * An undirected graph is implemented as a directed graph which maintains the following invariant:
  * "If an edge (from, to) is a member of the graph, then so is its complement (to, from)."
  */
-public class UndirectedGraph<V> implements Graph<V> {
+public class UndirectedGraph<V> extends DirectedGraph<V> {
     private final Map<V, Set<Edge<V>>> vertices = new HashMap<>();
 
     @Override
-    public void add(V vertex) {
-        if (!contains(vertex))
-            vertices.put(vertex, new HashSet<>());
-    }
-
-    @Override
     public void add(Edge<V> edge) {
-        if (edge == null)
-            throw new IllegalArgumentException();
-
-        // Add `edge` to the graph, as well as `edge.from` (if it is not already present)
-        var edges = vertices.getOrElse(edge.from(), new HashSet<>());
-        edges.add(edge);
-        vertices.put(edge.from(), edges);
-
-        // Add `edge.complement` to the graph, as well as `edge.to` (if it is not already present)
-        edges = vertices.getOrElse(edge.to(), new HashSet<>());
-        edges.add(edge.transpose());
-        vertices.put(edge.to(), edges);
-    }
-
-    @Override
-    public boolean contains(V vertex) {
-        if (vertex == null)
-            throw new IllegalArgumentException();
-        return vertices.contains(vertex);
-    }
-
-    @Override
-    public boolean contains(Edge<V> edge) {
-        if (edge == null)
-            throw new IllegalArgumentException();
-
-        var edges = vertices.getOrElse(edge.from(), new HashSet<>());
-        return edges.contains(edge);
+        super.add(edge);
+        super.add(edge.transpose());
     }
 
     @Override
     public void remove(V vertex) {
         if (vertex == null)
             throw new IllegalArgumentException();
-        // Remove any edges this vertex is part of:
-        // 1) Remove the "incoming" edges of `vertex`
-        for (var edge : edges(vertex)) {
-            var edges = vertices.get(edge.to());
-            edges.remove(edge.transpose());
-        }
-        // 2) Remove the "outgoing" edges of `vertex`
+        for (var edge : edges(vertex))
+            remove(edge);
         vertices.delete(vertex);
     }
 
     @Override
     public void remove(Edge<V> edge) {
-        if (edge == null)
-            throw new IllegalArgumentException();
-        // Remove `edge`,
-        var edges = vertices.get(edge.from());
-        edges.remove(edge);
-
-        // , as well as its mirror, `edge.complement`
-        edges = vertices.get(edge.to());
-        edges.remove(edge.transpose());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return vertices.isEmpty();
+        super.remove(edge);
+        super.remove(edge.transpose());
     }
 
     @Override
     public int size() {
-        return vertices.size() / 2;
-    }
-
-    @Override
-    public Iterable<V> vertices() {
-        return vertices.keys();
-    }
-
-    @Override
-    public Iterable<Edge<V>> edges() {
-        // TODO Stream edges without copying all of them first
-        var edges = new LinkedList<Edge<V>>();
-        for (var vertex : vertices())
-            for (var edge : edges(vertex))
-                edges.push(edge);
-        return edges;
-    }
-
-    @Override
-    public Iterable<Edge<V>> edges(V vertex) {
-        return vertices.get(vertex);
+        return super.size() / 2;
     }
 
     public Iterable<V> neighbours(V vertex) {

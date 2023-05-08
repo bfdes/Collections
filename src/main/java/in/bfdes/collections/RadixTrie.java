@@ -20,40 +20,6 @@ public class RadixTrie<V> implements Trie<V> {
 
         public Node() {
         }
-
-        private Node get(String suffix) {
-            var node = this;
-            var depth = 0;
-
-            while (node != null && depth < suffix.length())
-                node = node.children[suffix.charAt(depth++)];
-
-            return node;  // `node` could be `null`, or `node.value` could be `null`
-        }
-
-        private Queue<Tuple<String, V>> collect(String suffix) {
-            var queue = new Queue<Tuple<String, V>>();
-            var sb = new StringBuilder(suffix);
-            var root = get(suffix);
-
-            var collect = new Consumer<Node>() {
-                @Override
-                public void accept(Node node) {
-                    if (node == null)
-                        return;
-                    if (node.value != null)
-                        queue.push(new Tuple<>(sb.toString(), node.value));
-                    // Performs a DFS traversal across the character set
-                    for (char c = 0; c < radix; c++) {
-                        sb.append(c);
-                        accept(node.children[c]);
-                        sb.setLength(sb.length() - 1);
-                    }
-                }
-            };
-            collect.accept(root);
-            return queue;
-        }
     }
 
     @Override
@@ -71,7 +37,6 @@ public class RadixTrie<V> implements Trie<V> {
                     node.children[c] = apply(node.children[c], depth + 1);
                     return node;
                 }
-                // Creates or updates the value of this node
                 if (node.value == null)
                     size++;
                 node.value = value;
@@ -84,7 +49,10 @@ public class RadixTrie<V> implements Trie<V> {
 
     @Override
     public V get(String key) {
-        var node = root.get(key);
+        if (key == null)
+            throw new IllegalArgumentException();
+
+        var node = getNode(key);
         if (node == null || node.value == null)
             throw new NoSuchElementException();
         return node.value;
@@ -92,7 +60,10 @@ public class RadixTrie<V> implements Trie<V> {
 
     @Override
     public V getOrElse(String key, V defaultValue) {
-        var node = root.get(key);
+        if (key == null)
+            throw new IllegalArgumentException();
+
+        var node = getNode(key);
         if (node == null || node.value == null)
             return defaultValue;
         return node.value;
@@ -103,38 +74,24 @@ public class RadixTrie<V> implements Trie<V> {
         if (key == null)
             throw new IllegalArgumentException();
 
-        var delete = new BiFunction<Node, Integer, Node>() {
-            @Override
-            public Node apply(Node node, Integer depth) {
-                if (node == null)
-                    throw new NoSuchElementException();
-                if (depth == key.length() && node.value == null)
-                    throw new NoSuchElementException();
+        var node = root;
+        var depth = 0;
 
-                if (depth == key.length())
-                    node.value = null;
-                else {
-                    var c = key.charAt(depth);
-                    node.children[c] = apply(node.children[c], depth + 1);
-                }
+        while (node != null && depth < key.length())
+            node = node.children[key.charAt(depth++)];
 
-                // Optimization: Remove non-root nodes if they carry no values
-                if (depth == 0 || node.value != null)
-                    return node;
-                for (var child : node.children)
-                    if (child != null)
-                        return node;
-                return null;
-            }
-        };
-
-        root = delete.apply(root, 0);
+        if (node == null || node.value == null)
+            return;
         size--;
+        node.value = null;
     }
 
     @Override
     public boolean contains(String key) {
-        var node = root.get(key);
+        if (key == null)
+            throw new IllegalArgumentException();
+
+        var node = getNode(key);
         return node != null && node.value != null;
     }
 
@@ -149,33 +106,19 @@ public class RadixTrie<V> implements Trie<V> {
     }
 
     @Override
-    public Iterator<Tuple<String, V>> iterator() {
-        return root.collect("").iterator();
+    public Iterator<Pair<String, V>> iterator() {
+        return items("").iterator();
     }
 
     @Override
     public Iterable<String> keys() {
-        return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = iterator();
-
-            @Override
-            public boolean hasNext() {
-                return items.hasNext();
-            }
-
-            @Override
-            public String next() {
-                if (!hasNext())
-                    throw new NoSuchElementException();
-                return items.next().first();
-            }
-        };
+        return keys("");
     }
 
     @Override
     public Iterable<V> values() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = iterator();
+            private final Iterator<Pair<String, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -186,7 +129,7 @@ public class RadixTrie<V> implements Trie<V> {
             public V next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().second();
+                return items.next().value();
             }
         };
     }
@@ -195,8 +138,9 @@ public class RadixTrie<V> implements Trie<V> {
     public Iterable<String> keys(String prefix) {
         if (prefix == null)
             throw new IllegalArgumentException();
+
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = root.collect(prefix).iterator();
+            private final Iterator<Pair<String, V>> items = items(prefix).iterator();
 
             @Override
             public boolean hasNext() {
@@ -207,7 +151,7 @@ public class RadixTrie<V> implements Trie<V> {
             public String next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().first();
+                return items.next().key();
             }
         };
     }
@@ -217,20 +161,52 @@ public class RadixTrie<V> implements Trie<V> {
         if (query == null)
             throw new IllegalArgumentException();
 
-        var checkpoint = 0;  // represents the length of the longest prefix found
+        var length = 0;
         var depth = 0;
         var node = root;
 
         while (node != null) {
             if (node.value != null)
-                // Found a longer prefix, so save progress
-                checkpoint = depth;
+                length = depth;
             if (depth == query.length())
-                // Longest prefix is actually the query, so bail
                 break;
-            // Try to look for a longer prefix
             node = node.children[query.charAt(depth++)];
         }
-        return query.substring(0, checkpoint);
+        return query.substring(0, length);
+    }
+
+    private Node getNode(String prefix) {
+        var node = root;
+        var depth = 0;
+
+        while (node != null && depth < prefix.length())
+            node = node.children[prefix.charAt(depth++)];
+
+        return node;
+    }
+
+    private Iterable<Pair<String, V>> items(String prefix) {
+        var queue = new Queue<Pair<String, V>>();
+        var sb = new StringBuilder(prefix);
+        var node = getNode(prefix);
+
+        var collect = new Consumer<Node>() {
+            @Override
+            public void accept(Node node) {
+                if (node == null)
+                    return;
+                if (node.value != null)
+                    queue.push(new Pair<>(sb.toString(), node.value));
+                for (char c = 0; c < radix; c++) {
+                    sb.append(c);
+                    accept(node.children[c]);
+                    sb.setLength(sb.length() - 1);
+                }
+            }
+        };
+
+        collect.accept(node);
+
+        return queue;
     }
 }

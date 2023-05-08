@@ -9,7 +9,7 @@ import java.util.function.Function;
  * Uses the separate chaining strategy to account for key hash collisions.
  */
 public class HashMap<K, V> implements Map<K, V> {
-    private int size = 0;  // the number of key-value pairs in the table
+    private int size = 0;
     private Node[] table;
 
     private class Node {
@@ -39,7 +39,6 @@ public class HashMap<K, V> implements Map<K, V> {
         if (key == null || value == null)
             throw new IllegalArgumentException();
 
-        // Double the table size if the average length of a chain is >= 10
         if (size >= 10 * table.length) resize(2 * table.length);
 
         var i = hash(key);
@@ -52,7 +51,6 @@ public class HashMap<K, V> implements Map<K, V> {
             }
             node = node.next;
         }
-        // Not found
         size++;
         table[i] = new Node(key, value, table[i]);
     }
@@ -62,8 +60,7 @@ public class HashMap<K, V> implements Map<K, V> {
         if (key == null)
             throw new IllegalArgumentException();
 
-        var i = hash(key);
-        var node = table[i];
+        var node = table[hash(key)];
 
         while (node != null) {
             if (key.equals(node.key))
@@ -105,7 +102,6 @@ public class HashMap<K, V> implements Map<K, V> {
         var i = hash(key);
         table[i] = delete.apply(table[i]);
 
-        // Halve the table size if the average length of a chain is <= 2
         if (size > 4 && size <= 2 * table.length) resize(size / 2);
     }
 
@@ -130,7 +126,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Iterator<Tuple<K, V>> iterator() {
+    public Iterator<Pair<K, V>> iterator() {
         return new Iterator<>() {
             private int nextChain = 0;
             private Node nextNode;
@@ -141,12 +137,12 @@ public class HashMap<K, V> implements Map<K, V> {
             }
 
             @Override
-            public Tuple<K, V> next() {
+            public Pair<K, V> next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
                 if (nextNode == null)
                     nextNode = table[nextChain++];
-                var pair = new Tuple<>(nextNode.key, nextNode.value);
+                var pair = new Pair<>(nextNode.key, nextNode.value);
                 nextNode = nextNode.next;
                 return pair;
             }
@@ -156,7 +152,7 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public Iterable<K> keys() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<K, V>> items = iterator();
+            private final Iterator<Pair<K, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -167,7 +163,7 @@ public class HashMap<K, V> implements Map<K, V> {
             public K next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().first();
+                return items.next().key();
             }
         };
     }
@@ -175,7 +171,7 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public Iterable<V> values() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<K, V>> items = iterator();
+            private final Iterator<Pair<K, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -186,7 +182,7 @@ public class HashMap<K, V> implements Map<K, V> {
             public V next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().second();
+                return items.next().value();
             }
         };
     }
@@ -194,7 +190,7 @@ public class HashMap<K, V> implements Map<K, V> {
     private void resize(int newCapacity) {
         var temp = new HashMap<K, V>(newCapacity);
         for (var pair : this)
-            temp.put(pair.first(), pair.second());
+            temp.put(pair.key(), pair.value());
         table = temp.table;
     }
 

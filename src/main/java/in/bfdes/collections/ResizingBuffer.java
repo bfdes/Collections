@@ -53,7 +53,7 @@ public class ResizingBuffer<T> implements Iterable<T> {
         if (isEmpty())
             throw new NoSuchElementException();
         var item = buffer[head];
-        buffer[head] = null;  // prevents loitering
+        buffer[head] = null;
         head = (head + 1) % buffer.length;
         size--;
         if (size == buffer.length / 4)
@@ -100,7 +100,7 @@ public class ResizingBuffer<T> implements Iterable<T> {
             public T next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                T item = buffer[next];
+                var item = buffer[next];
                 next = (next + 1) % buffer.length;
                 return item;
             }

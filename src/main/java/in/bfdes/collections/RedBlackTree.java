@@ -39,7 +39,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements Tree<K, V>{
     }
 
     @Override
-    public Iterator<Tuple<K, V>> iterator() {
+    public Iterator<Pair<K, V>> iterator() {
         return null;
     }
 

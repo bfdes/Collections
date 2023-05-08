@@ -7,7 +7,7 @@ public class QuickFind<T> implements DisjointSet<T> {
     private final Map<T, T> components = new HashMap<>();
 
     public QuickFind(T[] elements) {
-        for (T e : elements)
+        for (var e : elements)
             components.put(e, e);
     }
 
@@ -27,14 +27,14 @@ public class QuickFind<T> implements DisjointSet<T> {
         if (!components.containsKey(i) || !components.containsKey(j))
             throw new IllegalArgumentException();
 
-        T cptI = components.get(i);
-        T cptJ = components.get(j);
+        var cptI = components.get(i);
+        var cptJ = components.get(j);
 
         if (cptI == cptJ)
-            return; // `i` and `j` are already connected
-        for (Map.Entry<T, T> entry : components.entrySet()) {
-            T e = entry.getKey();
-            T cpt = entry.getValue();
+            return;
+        for (var entry : components.entrySet()) {
+            var e = entry.getKey();
+            var cpt = entry.getValue();
             if (cpt == cptI)
                 components.put(e, cptJ);
         }

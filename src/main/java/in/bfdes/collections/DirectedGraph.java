@@ -20,7 +20,6 @@ public class DirectedGraph<V> implements Graph<V> {
     public void add(Edge<V> edge) {
         if (edge == null)
             throw new IllegalArgumentException();
-        // Add `from` and `to` to the graph, if they are not already present
         var edges = vertices.getOrElse(edge.from(), new HashSet<>());
         edges.add(edge);
         vertices.put(edge.from(), edges);
@@ -46,10 +45,9 @@ public class DirectedGraph<V> implements Graph<V> {
     public void remove(V vertex) {
         if (vertex == null)
             throw new IllegalArgumentException();
-        // Remove both incoming and outgoing edges for `vertex`, which requires a full scan
         for (var edge : edges())
             if (edge.to().equals(vertex))
-                remove(edge); // Note: `edge.from` may be left without any edges
+                remove(edge);
         vertices.delete(vertex);
     }
 
@@ -58,7 +56,7 @@ public class DirectedGraph<V> implements Graph<V> {
         if (edge == null)
             throw new IllegalArgumentException();
         var edges = vertices.get(edge.from());
-        edges.remove(edge);  // Note: `from` and `to` may be left without any edges
+        edges.remove(edge);
     }
 
     @Override
@@ -73,12 +71,11 @@ public class DirectedGraph<V> implements Graph<V> {
 
     @Override
     public Iterable<V> vertices() {
-        return vertices(VertexOrder.ANY_ORDER);
+        return vertices.keys();
     }
 
     @Override
     public Iterable<Edge<V>> edges() {
-        // TODO Stream edges without copying all of them first
         var edges = new LinkedList<Edge<V>>();
         for (var vertex : vertices())
             for (var edge : edges(vertex))
@@ -106,7 +103,7 @@ public class DirectedGraph<V> implements Graph<V> {
      */
     public boolean isCyclic() {
         // Use recursive DFS to determine whether a graph is cyclic.
-        // In a depth-first trace of a cyclic graph at least one vertex will appear twice.
+        // In a depth-key trace of a cyclic graph at least one vertex will appear twice.
         var visitedVertices = new HashSet<V>();
         var stack = new HashSet<V>();
 
@@ -114,9 +111,9 @@ public class DirectedGraph<V> implements Graph<V> {
             @Override
             public boolean test(V vertex) {
                 if (stack.contains(vertex))
-                    return true;  // `vertex` encountered twice in a depth-first trace
+                    return true;  // `vertex` encountered twice in a depth-key trace
                 if (visitedVertices.contains(vertex))
-                    return false;  // `vertex` was processed in some other depth-first trace
+                    return false;  // `vertex` was processed in some other depth-key trace
                 visitedVertices.add(vertex);
                 stack.add(vertex);
 
@@ -163,7 +160,7 @@ public class DirectedGraph<V> implements Graph<V> {
         /*
         Invoke `collect` on all vertices to account for the fact that:
         1. Not all vertices are reachable from one another
-        2. The first vertex we call `collect` on might have incoming links
+        2. The key vertex we call `collect` on might have incoming links
          */
         for (var vertex : vertices.keys())
             if (!visitedVertices.contains(vertex))
@@ -284,7 +281,7 @@ public class DirectedGraph<V> implements Graph<V> {
                 yield new Paths<>(source, incomingEdges);
             }
             case DIJKSTRA -> {
-                var adjacentVertices = new BinaryHeap<V, Double>();
+                var adjacentVertices = new  BinaryHeap<V, Double>();
                 adjacentVertices.push(source, 0d);
 
                 Consumer<Edge<V>> relax = edge -> {

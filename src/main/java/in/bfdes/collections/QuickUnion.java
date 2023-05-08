@@ -8,7 +8,7 @@ public class QuickUnion<T> implements DisjointSet<T> {
     private final Map<T, T> parents = new HashMap<>();
 
     public QuickUnion(T[] elements) {
-        for (T e : elements) {
+        for (var e : elements) {
             parents.put(e, e);
             ranks.put(e, 1);
         }
@@ -39,11 +39,11 @@ public class QuickUnion<T> implements DisjointSet<T> {
         if (!parents.containsKey(i) || !parents.containsKey(j))
             throw new IllegalArgumentException();
 
-        T rootI = root(i);
-        T rootJ = root(j);
+        var rootI = root(i);
+        var rootJ = root(j);
         if (rootI == rootJ) return;  // `i` and `j` are already connected
-        int rankI = ranks.get(rootI);
-        int rankJ = ranks.get(rootJ);
+        var rankI = ranks.get(rootI);
+        var rankJ = ranks.get(rootJ);
 
         if (rankI > rankJ) {
             ranks.put(rootI, rankI + rankJ);

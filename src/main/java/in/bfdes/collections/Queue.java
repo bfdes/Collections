@@ -16,6 +16,10 @@ public class Queue<T> implements Iterable<T> {
             this.item = item;
             this.next = next;
         }
+
+        public Node(T item) {
+            this.item = item;
+        }
     }
 
     public Queue() {
@@ -59,7 +63,7 @@ public class Queue<T> implements Iterable<T> {
     public void push(T item) {
         if (item == null)
             throw new IllegalArgumentException();
-        var last = new Node(item, null);
+        var last = new Node(item);
         if (isEmpty()) {
             head = last;
         } else {
@@ -89,7 +93,7 @@ public class Queue<T> implements Iterable<T> {
             public T next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                T item = next.item;
+                var item = next.item;
                 next = next.next;
                 return item;
             }

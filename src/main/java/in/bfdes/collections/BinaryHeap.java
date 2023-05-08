@@ -56,22 +56,19 @@ public class BinaryHeap<V, K extends Comparable<K>> implements PriorityQueue<V, 
     public V pop() {
         if (isEmpty())
             throw new IllegalStateException();
-        var smallestItem = values[1];
+        var value = values[1];
 
         swap(1, size);
-        // Prevent loitering
         keys[size] = null;
         values[size] = null;
         size--;
         sink(1);
-        // Clear index
-        index.delete(smallestItem);
+        index.delete(value);
 
-        // Lazily reduces the size of the backing array, if necessary
         if (size == keys.length / 4)
             resize(keys.length / 2);
 
-        return smallestItem;
+        return value;
     }
 
     @Override
@@ -121,19 +118,23 @@ public class BinaryHeap<V, K extends Comparable<K>> implements PriorityQueue<V, 
         values = newValues;
     }
 
-    private void sink(int k) {
-        while (2 * k <= size) {
-            var smallest = 2 * k < size && isGreater(2 * k, 2 * k + 1) ? 2 * k + 1 : 2 * k;
-            if (!isGreater(k, smallest)) break;
-            swap(k, smallest);
-            k = smallest;
+    private void sink(int i) {
+        while (2 * i <= size) {
+            var l = 2 * i;
+            var r = 2 * i + 1;
+
+            var m = l < size && isGreater(l, r) ? r : l;
+            if (!isGreater(i, m))
+                break;
+            swap(i, m);
+            i = m;
         }
     }
 
-    private void swim(int k) {
-        while (k > 1 && isGreater(k / 2, k)) {
-            swap(k / 2, k);
-            k = k / 2;
+    private void swim(int i) {
+        while (i > 1 && isGreater(i / 2, i)) {
+            swap(i / 2, i);
+            i = i / 2;
         }
     }
 
@@ -142,16 +143,13 @@ public class BinaryHeap<V, K extends Comparable<K>> implements PriorityQueue<V, 
     }
 
     private void swap(int i, int j) {
-        // Swap keys
         var tmpKey = keys[i];
         keys[i] = keys[j];
         keys[j] = tmpKey;
 
-        // Maintain index
         index.put(values[i], j);
         index.put(values[j], i);
 
-        // Swap values
         var tmpValue = values[i];
         values[i] = values[j];
         values[j] = tmpValue;

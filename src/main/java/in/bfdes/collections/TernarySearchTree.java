@@ -10,14 +10,14 @@ public class TernarySearchTree<V> implements Trie<V> {
     private int size;
 
     private class Node {
-        public final char key;
+        public final char c;
         public V value;
         public Node left;
         public Node middle;
         public Node right;
 
-        public Node(char key) {
-            this.key = key;
+        public Node(char c) {
+            this.c = c;
         }
     }
 
@@ -25,42 +25,54 @@ public class TernarySearchTree<V> implements Trie<V> {
     public void put(String key, V value) {
         if (key == null || value == null)
             throw new IllegalArgumentException();
+        if (key.length() == 0)
+            throw new IllegalArgumentException();
+
         var put = new BiFunction<Node, Integer, Node>() {
             @Override
             public Node apply(Node node, Integer depth) {
                 var c = key.charAt(depth);
                 if (node == null)
                     node = new Node(c);
-                if (c < node.key)
+                if (c < node.c)
                     node.left = apply(node.left, depth);
-                else if (c > node.key)
+                else if (c > node.c)
                     node.right = apply(node.right, depth);
                 else if (depth < key.length() - 1)
                     node.middle = apply(node.middle, depth + 1);
-                else if (node.value != null)
-                    // `put` is updating an existing key-value pair
-                    node.value = value;
-                else {
-                    // `put` is creating a new key-value pair
+                else if (node.value == null) {
                     size++;
                     node.value = value;
-                }
+                } else
+                    node.value = value;
                 return node;
             }
         };
+
         root = put.apply(root, 0);
     }
 
     @Override
     public V get(String key) {
+        if (key == null)
+            throw new IllegalArgumentException();
+        if (key.length() == 0)
+            throw new IllegalArgumentException();
+
         var node = getNode(key);
         if (node == null || node.value == null)
             throw new NoSuchElementException();
+
         return node.value;
     }
 
     @Override
     public V getOrElse(String key, V defaultValue) {
+        if (key == null)
+            throw new IllegalArgumentException();
+        if (key.length() == 0)
+            throw new IllegalArgumentException();
+
         var node = getNode(key);
         if (node == null || node.value == null)
             return defaultValue;
@@ -71,34 +83,37 @@ public class TernarySearchTree<V> implements Trie<V> {
     public void delete(String key) {
         if (key == null)
             throw new IllegalArgumentException();
+        if (key.length() == 0)
+            throw new IllegalArgumentException();
 
         var node = root;
         var depth = 0;
 
-        while (node != null) {
+        while (node != null && depth < key.length()) {
             var c = key.charAt(depth);
-            if (c < node.key)
+            if (c < node.c)
                 node = node.left;
-            else if (c > node.key)
+            else if (c > node.c)
                 node = node.right;
-            else if (depth < key.length() - 1) {
+            else {
                 node = node.middle;
                 depth++;
-            } else if (node.value == null)
-                throw new NoSuchElementException();
-            else {
-                node.value = null;
-                size--;
-                break;
             }
         }
 
-        if (node == null)
-            throw new NoSuchElementException();
+        if (node == null || node.value == null)
+            return;
+        size--;
+        node.value = null;
     }
 
     @Override
     public boolean contains(String key) {
+        if (key == null)
+            throw new IllegalArgumentException();
+        if (key.length() == 0)
+            throw new IllegalArgumentException();
+
         var node = getNode(key);
         return node != null && node.value != null;
     }
@@ -114,33 +129,19 @@ public class TernarySearchTree<V> implements Trie<V> {
     }
 
     @Override
-    public Iterator<Tuple<String, V>> iterator() {
-        return collect("").iterator();
+    public Iterator<Pair<String, V>> iterator() {
+        return items("").iterator();
     }
 
     @Override
     public Iterable<String> keys() {
-        return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = iterator();
-
-            @Override
-            public boolean hasNext() {
-                return items.hasNext();
-            }
-
-            @Override
-            public String next() {
-                if (!hasNext())
-                    throw new NoSuchElementException();
-                return items.next().first();
-            }
-        };
+        return keys("");
     }
 
     @Override
-    public Iterable<V> values() {
+    public java.lang.Iterable<V> values() {
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = iterator();
+            private final Iterator<Pair<String, V>> items = iterator();
 
             @Override
             public boolean hasNext() {
@@ -151,15 +152,18 @@ public class TernarySearchTree<V> implements Trie<V> {
             public V next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().second();
+                return items.next().value();
             }
         };
     }
 
     @Override
     public Iterable<String> keys(String prefix) {
+        if (prefix == null)
+            throw new IllegalArgumentException();
+
         return () -> new Iterator<>() {
-            private final Iterator<Tuple<String, V>> items = collect(prefix).iterator();
+            private final Iterator<Pair<String, V>> items = items(prefix).iterator();
 
             @Override
             public boolean hasNext() {
@@ -170,7 +174,7 @@ public class TernarySearchTree<V> implements Trie<V> {
             public String next() {
                 if (!hasNext())
                     throw new NoSuchElementException();
-                return items.next().first();
+                return items.next().key();
             }
         };
     }
@@ -180,58 +184,51 @@ public class TernarySearchTree<V> implements Trie<V> {
         if (query == null)
             throw new IllegalArgumentException();
 
-        var checkpoint = 0;  // represents the length of the longest prefix found
+        var length = 0;
         var depth = 0;
         var node = root;
 
-        while (node != null) {
-            if (node.value != null)
-                // Found a longer prefix, so save progress
-                checkpoint = depth;
-            if (depth == query.length())
-                // Longest prefix is actually the whole query, so bail now
-                break;
-
-            // Try to look for a longer prefix
+        while (node != null && depth < query.length()) {
             var c = query.charAt(depth);
-            if (c < node.key)
+            if (c < node.c)
                 node = node.left;
-            else if (c > node.key)
+            else if (c > node.c)
                 node = node.right;
-            else {
+            else if (node.value == null) {
                 depth++;
+                node = node.middle;
+            } else {
+                length = ++depth;
                 node = node.middle;
             }
         }
-        return query.substring(0, checkpoint);
+
+        return query.substring(0, length);
     }
 
-    private Node getNode(String suffix) {
-        if (suffix == null)
-            throw new IllegalArgumentException();
-
+    private Node getNode(String prefix) {
         var node = root;
         var depth = 0;
 
-        while (node != null) {
-            var c = suffix.charAt(depth);
-            if (c < node.key)
+        while (node != null && depth < prefix.length()) {
+            var c = prefix.charAt(depth);
+            if (c < node.c)
                 node = node.left;
-            else if (c > node.key)
+            else if (c > node.c)
                 node = node.right;
-            else if (depth < suffix.length() - 1) {
-                // character match
+            else {
                 node = node.middle;
                 depth++;
-            } else break;
+            }
         }
-        return node; // `node` could be `null`, or `node.value` could be `null`
+
+        return node;
     }
 
-    private Queue<Tuple<String, V>> collect(String suffix) {
-        var queue = new Queue<Tuple<String, V>>();
-        var sb = new StringBuilder(suffix);
-        var root = getNode(suffix);
+    private Iterable<Pair<String, V>> items(String prefix) {
+        var queue = new Queue<Pair<String, V>>();
+        var sb = new StringBuilder(prefix);
+        var node = getNode(prefix);
 
         var collect = new Consumer<Node>() {
             @Override
@@ -239,16 +236,17 @@ public class TernarySearchTree<V> implements Trie<V> {
                 if (node == null)
                     return;
                 accept(node.left);
-                sb.append(node.key);
+                sb.append(node.c);
                 if (node.value != null)
-                    queue.push(new Tuple<>(sb.toString(), node.value));
+                    queue.push(new Pair<>(sb.toString(), node.value));
                 accept(node.middle);
                 sb.setLength(sb.length() - 1);
                 accept(node.right);
             }
         };
 
-        collect.accept(root);
+        collect.accept(node);
+
         return queue;
     }
 }
