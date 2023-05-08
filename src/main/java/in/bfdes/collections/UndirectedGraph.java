@@ -35,11 +35,6 @@ public class UndirectedGraph<V> extends DirectedGraph<V> {
         super.remove(edge.transpose());
     }
 
-    @Override
-    public int size() {
-        return super.size() / 2;
-    }
-
     public Iterable<V> neighbours(V vertex) {
         return () -> new Iterator<>() {
             private final Iterator<Edge<V>> edges = edges(vertex).iterator();
